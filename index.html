@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OPENLIFE Careers</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap">
+<style>
+/* A recruiting site for a fictional 2055 company. One warm, friendly look on purpose:
+   it must feel like a brand of "care" so that the fine print can do the damage.
+   Phone first (guests open it from a QR code), scales up for the projector. */
+:root{
+  color-scheme: light;
+  --paper:#FFF4E8;
+  --paper-2:#FCE7D1;
+  --card:#FFFAF4;
+  --ink:#1F1611;
+  --muted:#76634F;
+  --line:#EBD3B9;
+  --orange:#FF6A13;
+  --orange-deep:#C84700;
+  --on-orange:#1A1411;
+  --gain:#1B7447;
+  --loss:#BF2B49;
+  --mark:#FFE3C2;
+  --font-display:'Sora','Segoe UI',system-ui,sans-serif;
+  --font-body:'Manrope',system-ui,'Segoe UI',sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{font-size:clamp(16px,1.15vw + .3rem,23px);-webkit-text-size-adjust:100%}
+body{
+  margin:0;min-height:100vh;color:var(--ink);font-family:var(--font-body);font-size:1rem;line-height:1.5;
+  background:
+    radial-gradient(60rem 28rem at 100% -10%, #FFD9B3 0%, transparent 60%),
+    var(--paper);
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:.9rem 1.6rem;
+  -webkit-font-smoothing:antialiased;
+}
+button,input{font:inherit;color:inherit}
+h1,h2,h3,p,ul,dl,dd{margin:0}
+.wrap{max-width:62rem;margin:0 auto;display:flex;flex-direction:column;gap:1.4rem}
+
+/* top bar */
+.top{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:.6rem;font:600 1.05rem var(--font-display);letter-spacing:.14em}
+.brand i{width:.8rem;height:.8rem;border-radius:50%;background:var(--orange);box-shadow:0 0 0 .22rem #FFD2AE}
+.brand span{font:500 .62rem var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:.18rem .55rem}
+.steps{display:flex;gap:.35rem;list-style:none;margin:0;padding:0}
+.steps li{width:1.7rem;height:.28rem;border-radius:9px;background:var(--line);transition:background .3s}
+.steps li.on{background:var(--orange)}
+.steps li.done{background:var(--ink)}
+
+/* screens */
+.screen{display:flex;flex-direction:column;gap:1.3rem;animation:in .35s ease both}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.screen:focus,.screen h1:focus,.screen h2:focus{outline:none}
+.eyebrow{font:500 .68rem var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+h1{font:700 clamp(2.3rem,7.2vw,4.3rem)/1.02 var(--font-display);letter-spacing:-.025em;text-wrap:balance}
+h1 em{font-style:normal;background:linear-gradient(transparent 62%,#FFB57A 62% 92%,transparent 92%)}
+h2{font:700 clamp(1.7rem,5vw,2.6rem)/1.08 var(--font-display);letter-spacing:-.02em;text-wrap:balance}
+.lede{font-size:1.15rem;max-width:34rem;color:#4B3A2C}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.6rem;
+  min-height:3.1rem;padding:.7rem 1.5rem;border:0;border-radius:99px;cursor:pointer;
+  background:var(--orange);color:var(--on-orange);font:700 1.05rem var(--font-display);letter-spacing:.01em;
+  box-shadow:0 .2rem 0 var(--orange-deep);transition:transform .12s,box-shadow .12s,filter .2s;
+}
+.btn:hover{filter:brightness(1.05)}
+.btn:active{transform:translateY(.14rem);box-shadow:0 .06rem 0 var(--orange-deep)}
+.btn:focus-visible,.plan:has(input:focus-visible),.link:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.btn[disabled]{background:var(--line);color:var(--muted);box-shadow:none;cursor:not-allowed}
+.btn.big{width:100%;min-height:3.6rem;font-size:1.25rem}
+.link{background:none;border:0;padding:.2rem 0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:.9rem}
+.row{display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+
+/* 1 · vacancy */
+.hero{display:grid;gap:1.6rem;grid-template-columns:1fr}
+.hero-copy{display:flex;flex-direction:column;gap:1.1rem;align-items:flex-start}
+.pill{display:inline-flex;align-items:center;gap:.5rem;font:500 .72rem var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--on-orange);background:var(--orange);padding:.3rem .75rem;border-radius:99px}
+.pill::before{content:"";width:.45rem;height:.45rem;border-radius:50%;background:var(--on-orange);animation:blink 1.6s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+.job{background:var(--card);border:1px solid var(--line);border-radius:1.1rem;padding:1.3rem;display:flex;flex-direction:column;gap:1rem;box-shadow:0 1rem 2.4rem -1.4rem #8a4a1a66}
+.job h2{font-size:1.55rem}
+.job .req{font:400 .68rem var(--font-mono);letter-spacing:.1em;color:var(--muted)}
+.facts{display:grid;gap:.15rem;grid-template-columns:1fr}
+.facts div{display:grid;grid-template-columns:7.2rem 1fr;gap:.8rem;padding:.55rem 0;border-top:1px dashed var(--line)}
+.facts dt{font:500 .68rem var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-top:.2rem}
+.facts dd{font-weight:600}
+.perks{display:flex;flex-wrap:wrap;gap:.45rem}
+.perks span{font-size:.78rem;font-weight:600;background:var(--paper-2);border-radius:99px;padding:.25rem .7rem}
+
+/* 2 · plans */
+.rent{display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap;border:2px solid var(--ink);border-radius:.9rem;padding:.7rem 1rem;background:var(--card)}
+.rent .k{font:500 .72rem var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.rent b{font:700 1.9rem var(--font-display);letter-spacing:-.02em}
+.rent .s{color:var(--muted);font-size:.9rem}
+.plans{display:grid;gap:.9rem;grid-template-columns:1fr}
+.plan{position:relative;display:flex;flex-direction:column;gap:.75rem;background:var(--card);border:2px solid var(--line);border-radius:1.1rem;padding:1.1rem 1.1rem 1.2rem;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
+.plan:hover{border-color:#E3B994}
+.plan input{position:absolute;opacity:0;pointer-events:none}
+.plan:has(input:checked){border-color:var(--orange);box-shadow:0 0 0 .22rem #FFD2AE,0 1rem 2rem -1.2rem #8a4a1a88}
+.plan .tag{position:absolute;top:-.7rem;right:1rem;font:600 .65rem var(--font-mono);letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:var(--paper);border-radius:99px;padding:.22rem .65rem}
+.plan .name{font:700 1.25rem var(--font-display)}
+.plan .tl{color:var(--muted);font-size:.95rem;margin-top:-.45rem}
+.price{display:flex;align-items:baseline;gap:.35rem}
+.price b{font:700 2.2rem var(--font-display);letter-spacing:-.03em}
+.price span{color:var(--muted);font-size:.85rem}
+.meter{display:flex;flex-direction:column;gap:.4rem;margin-top:.9rem}
+.track{position:relative;height:.65rem;border-radius:9px;background:var(--paper-2)}
+.fill{position:absolute;inset:0 auto 0 0;border-radius:9px}
+.fill.low{background:var(--loss)}
+.fill.ok{background:var(--gain)}
+.tick{position:absolute;top:-.3rem;bottom:-.3rem;width:2px;background:var(--ink)}
+.tick::after{content:"rent";position:absolute;top:-1rem;left:50%;transform:translateX(-50%);font:500 .6rem var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+.after{font:600 .9rem var(--font-mono)}
+.after.neg{color:var(--loss)}
+.after.pos{color:var(--gain)}
+.inc{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.3rem;font-size:.92rem}
+.inc li{display:flex;gap:.55rem;align-items:flex-start}
+.inc li::before{content:"✓";font-weight:700;color:var(--orange-deep);flex:none}
+.inc li.plus{font:500 .68rem var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.2rem}
+.inc li.plus::before{content:""}
+.inc li.no{color:var(--muted)}
+.inc li.no::before{content:"–";color:var(--muted)}
+.inc li.rare{font-weight:700;background:var(--mark);border-radius:.5rem;padding:.3rem .5rem;margin-top:.15rem}
+.invisible{display:flex;flex-wrap:wrap;gap:.4rem .9rem;align-items:baseline;border:1px dashed #C9AE92;border-radius:.9rem;padding:.7rem 1rem;color:var(--muted);font-size:.88rem}
+.invisible b{color:var(--ink);font-family:var(--font-display)}
+
+/* 3 · contract */
+.short{display:grid;gap:.5rem;padding:0;margin:0;list-style:none}
+.short li{display:flex;gap:.7rem;align-items:center;font-size:1.15rem;font-weight:600}
+.short li span{flex:none;width:2rem;height:2rem;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:var(--on-orange);font:700 .9rem var(--font-display)}
+.doc{border:1px solid var(--line);background:var(--card);border-radius:1rem;overflow:hidden}
+.doc-h{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.7rem 1rem;border-bottom:1px solid var(--line);font:500 .66rem var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.doc-b{max-height:min(46vh,26rem);overflow:auto;padding:.9rem 1rem 1.1rem;font-size:.74rem;line-height:1.5;color:#5a4838;-webkit-overflow-scrolling:touch}
+.doc-b h3{font:700 .72rem var(--font-display);letter-spacing:.08em;text-transform:uppercase;color:var(--ink);margin:.9rem 0 .25rem}
+.doc-b h3:first-child{margin-top:0}
+.doc-b p{margin:0 0 .35rem}
+.doc-b b{color:var(--ink)}
+.doc-b table{border-collapse:collapse;width:100%;margin:.3rem 0}
+.doc-b td{padding:.18rem .4rem .18rem 0;border-top:1px solid var(--line);vertical-align:top}
+.doc-b td:first-child{width:2.4rem;font-family:var(--font-mono)}
+.doc-b td:last-child{text-align:right;white-space:nowrap;font-family:var(--font-mono)}
+.accept{display:flex;flex-direction:column;gap:.7rem}
+.micro{font-size:.74rem;color:var(--muted);line-height:1.4}
+
+/* 4 · welcome */
+.welcome{display:grid;gap:1.4rem;grid-template-columns:1fr}
+.badge{background:var(--ink);color:var(--paper);border-radius:1.2rem;padding:1.3rem;display:flex;flex-direction:column;gap:1rem;max-width:26rem;box-shadow:0 1.4rem 2.6rem -1.6rem #1a1411}
+.badge .top2{display:flex;justify-content:space-between;align-items:center;font:600 .9rem var(--font-display);letter-spacing:.14em}
+.badge .top2 i{width:.7rem;height:.7rem;border-radius:50%;background:var(--orange);box-shadow:0 0 .8rem .1rem var(--orange)}
+.badge .n{font:500 1.9rem var(--font-mono);letter-spacing:.04em}
+.badge dl{display:grid;grid-template-columns:auto 1fr;gap:.35rem 1rem;font-size:.9rem}
+.badge dt{font:500 .64rem var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:#C9B29B;padding-top:.22rem}
+.badge dd{font-weight:600}
+.look{display:flex;align-items:center;gap:.8rem;font:600 1.1rem var(--font-display)}
+.look svg{flex:none;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-.35rem)}}
+
+footer{display:flex;justify-content:space-between;gap:.6rem 1.5rem;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:.9rem;font:400 .64rem var(--font-mono);letter-spacing:.08em;color:var(--muted)}
+
+@media (min-width:760px){
+  .hero{grid-template-columns:1.15fr .85fr;align-items:center;gap:2.6rem}
+  .plans{grid-template-columns:repeat(3,1fr);gap:1.1rem;padding-top:.8rem}
+  .welcome{grid-template-columns:1.1fr .9fr;align-items:center;gap:2.4rem}
+  .doc-b{font-size:.78rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .screen,.look svg,.pill::before{animation:none}
+  .btn,.plan{transition:none}
+}
+
+/* Full employment contract (Maria Weber) */
+.ctr{background:var(--card);border:1px solid var(--line);border-radius:1.1rem;padding:1.3rem 1.2rem;font-size:.92rem;line-height:1.55}
+.ctr .ct{font:700 1.15rem/1.2 var(--font-display);letter-spacing:.01em;text-transform:uppercase;margin:0}
+.ctr .sub,.ctr .date{color:var(--muted);font-size:.85rem;margin:.3rem 0 0}
+.ctr h4{font:500 .7rem var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:1.5rem 0 .5rem;border-top:1px dashed var(--line);padding-top:.9rem}
+.ctr h5{font:700 .95rem var(--font-display);margin:1.1rem 0 .35rem;letter-spacing:.02em}
+.ctr p{margin:.55rem 0}
+.ctr .cl,.ctr .rec{display:grid;grid-template-columns:2.8rem 1fr;gap:.4rem;margin:.35rem 0}
+.ctr .n{font:500 .8rem var(--font-mono);color:var(--orange-deep);padding-top:.1rem}
+.ctr .sig{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.4rem;font:500 .7rem var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ctr .line{border-top:1px solid var(--ink);margin-top:2.2rem;padding-top:.3rem;font:600 .85rem var(--font-body);text-transform:none;letter-spacing:0;color:var(--ink)}
+.ctr .note{background:var(--mark);border-radius:.6rem;padding:.6rem .8rem;font-size:.85rem}
+.ctr .chk{font-family:var(--font-mono);font-size:.82rem;margin:.3rem 0}
+.ctr .tbl{overflow-x:auto}
+.ctr table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:34rem}
+.ctr th{font:500 .62rem var(--font-mono);letter-spacing:.1em;text-transform:uppercase;text-align:left;color:var(--muted);border-bottom:2px solid var(--ink);padding:.4rem .4rem}
+.ctr td{border-bottom:1px dashed var(--line);padding:.45rem .4rem;vertical-align:top}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><i></i>OPENLIFE <span>Careers</span></div>
+    <ol class="steps" id="steps" aria-label="Application progress">
+      <li></li><li></li><li></li><li></li>
+    </ol>
+  </header>
+
+  <main>
+    <!-- 1 · Vacancy -->
+    <section class="screen" id="s-vacancy" data-screen="vacancy" hidden>
+      <div class="hero">
+        <div class="hero-copy">
+          <span class="pill">Now hiring</span>
+          <h1 tabindex="-1">Your life is <em>your job.</em></h1>
+          <p class="lede">OPENLIFE pays you a salary to live. No CV. No interview. No commute. You start tomorrow.</p>
+          <div class="row">
+            <button class="btn" type="button" data-go="plans">See plans <span aria-hidden="true">→</span></button>
+            <span class="micro">Apply in 30 seconds.</span>
+          </div>
+        </div>
+        <article class="job" aria-label="Job listing">
+          <div>
+            <p class="req">REQ. OL-2055-0001 · 1 POSITION PER PERSON</p>
+            <h2>Life Participant</h2>
+          </div>
+          <dl class="facts">
+            <div><dt>Salary</dt><dd>€400 – €2,000 per month</dd></div>
+            <div><dt>Hours</dt><dd>24 / 7, fully flexible</dd></div>
+            <div><dt>Location</dt><dd>Wherever you are</dd></div>
+            <div><dt>You need</dt><dd>A life. A pulse. A phone.</dd></div>
+            <div><dt>Starts</dt><dd>Tomorrow, 06:50</dd></div>
+          </dl>
+          <div class="perks" aria-label="Benefits">
+            <span>Ring included</span><span>Home Unit included</span><span>Care Team 24/7</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 2 · Plans -->
+    <section class="screen" id="s-plans" data-screen="plans" hidden>
+      <div>
+        <p class="eyebrow">Step 2 of 4</p>
+        <h2 tabindex="-1">Choose your plan</h2>
+      </div>
+      <div class="rent" aria-label="Monthly rent">
+        <span class="k">Rent</span><b>€1,100</b><span class="s">per month · for everyone · fixed</span>
+      </div>
+      <form class="plans" id="plans" onsubmit="return false">
+        <label class="plan">
+          <input type="radio" name="plan" value="Basic">
+          <span class="name">Basic</span>
+          <span class="tl">We see where you are.</span>
+          <span class="price"><b>€400</b><span>per month</span></span>
+          <span class="meter"><span class="track"><span class="fill low" style="width:20%"></span><span class="tick" style="left:55%"></span></span><span class="after neg">After rent: −€700</span></span>
+          <ul class="inc">
+            <li>Location</li><li>Sleep</li><li>Steps &amp; screen time</li>
+            <li class="no">Voice &amp; messages</li>
+            <li class="no">Face &amp; emotions</li>
+            <li class="no">Rare events ×3</li>
+          </ul>
+        </label>
+        <label class="plan">
+          <input type="radio" name="plan" value="Full">
+          <span class="name">Full</span>
+          <span class="tl">We hear what you say and write.</span>
+          <span class="price"><b>€1,200</b><span>per month</span></span>
+          <span class="meter"><span class="track"><span class="fill ok" style="width:60%"></span><span class="tick" style="left:55%"></span></span><span class="after pos">After rent: +€100</span></span>
+          <ul class="inc">
+            <li class="plus">Everything in Basic, plus</li>
+            <li>Voice at home and on calls</li>
+            <li>Messages &amp; chats</li>
+            <li>Searches &amp; reading</li>
+            <li class="no">Face &amp; emotions</li>
+            <li class="no">Rare events ×3</li>
+          </ul>
+        </label>
+        <label class="plan">
+          <span class="tag">Recommended</span>
+          <input type="radio" name="plan" value="Total">
+          <span class="name">Total</span>
+          <span class="tl">We see how you feel.</span>
+          <span class="price"><b>€2,000</b><span>per month</span></span>
+          <span class="meter"><span class="track"><span class="fill ok" style="width:100%"></span><span class="tick" style="left:55%"></span></span><span class="after pos">After rent: +€900</span></span>
+          <ul class="inc">
+            <li class="plus">Everything in Full, plus</li>
+            <li>Heartbeat &amp; stress</li>
+            <li>Face &amp; emotions</li>
+            <li>Home video</li>
+            <li class="rare">Rare events pay ×3: illness, conflict, grief</li>
+          </ul>
+        </label>
+      </form>
+      <p class="invisible"><b>Invisible plan</b><span>You pay €200 per month. Nothing is recorded.</span></p>
+      <div class="row">
+        <button class="btn" type="button" id="toContract" disabled>Choose a plan to continue</button>
+        <button class="link" type="button" data-go="vacancy">Back</button>
+      </div>
+    </section>
+
+    <!-- 3 · Agreement -->
+    <section class="screen" id="s-contract" data-screen="contract" hidden>
+      <div>
+        <p class="eyebrow">Step 3 of 4 · Last step</p>
+        <h2 tabindex="-1">Your agreement</h2>
+      </div>
+      <ul class="short">
+        <li><span>1</span>You live your life.</li>
+        <li><span>2</span>We record it.</li>
+        <li><span>3</span>You get paid.</li>
+      </ul>
+      <article class="doc" aria-label="Life Participant Agreement">
+        <div class="doc-h"><span>Life Participant Agreement</span><span>Version 14 · 31 pages · Full text below</span></div>
+        <div class="doc-b" tabindex="0">
+          <h3>1. Definitions</h3>
+          <p>1.1 “Participant” means the person who taps Accept. 1.2 “Stream” means any data captured under the Participant’s plan, including data from the ring, the OPENLIFE app and any Home Unit. 1.3 “Marketplace” means the platform on which OPENLIFE offers Streams to Buyers.</p>
+          <h3>2. Plans</h3>
+          <p>2.1 The Participant selects one plan: Basic, Full or Total. 2.2 <b>A move to a higher plan takes effect immediately. A move to a lower plan requires written notice and the approval of the Care Team.</b> 2.3 OPENLIFE may extend the content of a plan by notice in the app.</p>
+          <h3>3. Devices and permissions</h3>
+          <p>3.1 The Participant wears the OPENLIFE ring. 3.2 The OPENLIFE app may request access to location and screen time and, on Full and Total, to messages, calls, searches and reading history. Each “Allow” is a separate consent. 3.3 A Home Unit is installed in each room of the Participant’s residence. Microphones are active on Full and Total. Cameras are active on Total.</p>
+          <h3>4. Ownership</h3>
+          <p>4.1 Under the Data Ownership Act 2035 the Participant licenses all Streams to OPENLIFE, exclusively and worldwide, for the duration of this Agreement and after it. 4.2 Consent under the Act is recorded when the Participant taps Accept.</p>
+          <h3>5. Third parties</h3>
+          <p>5.1–5.3 Reserved. 5.4 <b>Where a third party appears in a Stream and no consent is on file, OPENLIFE masks the party’s identity. What was said, written and heard remains part of the Stream.</b></p>
+          <h3>6. Marketplace and certification</h3>
+          <p>6.1 Streams may be offered to Buyers, including AI developers, insurers, employers and researchers. 6.2 <b>Only moments verified as genuine by an independent audit are certified as Certified Human and paid in full.</b> The audit decides. 6.3 OPENLIFE sets the price of each sale.</p>
+          <h3>7. Private time</h3>
+          <p>7.1 The ring may be removed. 7.2 Removal must be confirmed by the Participant. 7.3 <b>Any period in which the ring is not worn is recorded as Private time and charged at €10 per hour.</b></p>
+          <h3>8. Term</h3>
+          <p>8.1 This Agreement runs until ended. 8.2 The licence in clause 4.1 survives termination. 8.3 This Agreement is governed by the Data Ownership Act 2035 as interpreted by OPENLIFE Legal.</p>
+          <h3>Annex I · Rates and participant share</h3>
+          <table>
+            <tr><td>1</td><td>Basic plan</td><td>€400 / month</td></tr>
+            <tr><td>2</td><td>Full plan</td><td>€1,200 / month</td></tr>
+            <tr><td>3</td><td>Total plan</td><td>€2,000 / month</td></tr>
+            <tr><td>4</td><td><b>Participant share of Marketplace revenue</b></td><td><b>10%</b></td></tr>
+            <tr><td>5</td><td>Rare events (Total plan only)</td><td>×3</td></tr>
+            <tr><td>6</td><td>Private time</td><td>€10 / hour</td></tr>
+          </table>
+        </div>
+      </article>
+      <p class="micro" style="margin-top:-.4rem">Want to see a signed copy? <button class="link" type="button" data-go="fullcontract">Read Maria Weber’s full employment contract</button></p>
+      <div class="accept">
+        <button class="btn big" type="button" id="accept">Accept</button>
+        <p class="micro">By tapping Accept you agree to the Life Participant Agreement, version 14, and give consent under the Data Ownership Act 2035.</p>
+        <div><button class="link" type="button" data-go="plans">Back to plans</button></div>
+      </div>
+    </section>
+
+    <!-- 4 · Welcome -->
+    <section class="screen" id="s-welcome" data-screen="welcome" hidden>
+      <div class="welcome">
+        <div style="display:flex;flex-direction:column;gap:1.1rem;align-items:flex-start">
+          <p class="eyebrow">Step 4 of 4 · Done</p>
+          <h1 tabindex="-1">Congratulations. <em>You are hired.</em></h1>
+          <p class="lede">Your ring will be at your seat. Keep your card white side up until we say so.</p>
+          <p class="look">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            Look up. Your first day starts on the main screen.
+          </p>
+        </div>
+        <div class="badge" aria-label="Employee badge">
+          <div class="top2"><span>OPENLIFE</span><i></i></div>
+          <div class="n" id="empId">OL-0000</div>
+          <dl>
+            <dt>Role</dt><dd>Life Participant</dd>
+            <dt>Plan</dt><dd id="planOut">Total</dd>
+            <dt>Start</dt><dd>Tomorrow, 06:50</dd>
+            <dt>Status</dt><dd>Recording begins on arrival</dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 · Full employment contract (reference copy, not a step) -->
+    <section class="screen" id="s-fullcontract" data-screen="fullcontract" hidden>
+      <div>
+        <p class="eyebrow">Case file OL-0482 · Reference copy</p>
+        <h2 tabindex="-1">Maria Weber’s employment contract</h2>
+      </div>
+      <p class="micro">Signed on 3 March 2053. It uses the same clause numbers as the Agreement you accepted: 2.2, 5.4, 6.2, 7.3 and Annex I, line 4.</p>
+      <article class="ctr" aria-label="Employment contract for recorded life services">
+<h3 class="ct">Employment contract for recorded life services</h3>
+<p class="sub">Fixed-term, continuous working time · Ref. LWA-2055-0482</p>
+<p class="date">In Barcelona, on 3 March 2053.</p>
+<h4>TOGETHER</h4>
+<p>On the one hand, <b>MR. JONAS LIND</b>, of legal age, acting in the name and on behalf of <b>OPENLIFE EUROPE, S.A.</b>, with registered office at C/ de Pallars, 255, 08018 Barcelona, holder of Tax Identification Number A-00002055, registered in the Commercial Registry of Barcelona, Volume 52104, Folio 88, Sheet B-555012, by virtue of the power of attorney granted before the Notary of Barcelona Ms. Núria Pons Ferrer on 12 January 2051 under number 118 of her protocol, in his capacity as Director of Human Supply (hereinafter, the “COMPANY”).</p>
+<p>On the other hand, <b>MS. MARIA WEBER</b>, of legal age, holder of Foreigner Identification Number (NIE) Y-0482055-W and Social Security number 08/04820551/12, with address for notification purposes in Barcelona (hereinafter, the “WORKER”).</p>
+<p>Both parties mutually recognise the legal capacity necessary to enter into this contract and, to that effect,</p>
+<h4>STATE</h4>
+<div class="rec"><span class="n">I.</span><span>That the COMPANY is an entity authorised by the Data Ownership Authority (licence no. DOA-2035-00001) to acquire, verify and transfer personal data of human origin, in accordance with Regulation (EU) 2035/412 on the Ownership and Transfer of Personal Data (hereinafter, the “Data Ownership Act”).</span></div>
+<div class="rec"><span class="n">II.</span><span>That the WORKER wishes to provide the COMPANY with services consisting of the continuous recording of her daily life, in exchange for remuneration.</span></div>
+<div class="rec"><span class="n">III.</span><span>That the WORKER declares that she has received, read and understood Annex I (Recording Levels and Rates) and Annex II (Declaration of the Worker) before signing this contract.</span></div>
+<p>Accordingly, the parties agree to enter into this employment contract, which shall be governed by the following</p>
+<h4>CLAUSES</h4>
+<h5>FIRST.– PURPOSE AND DEFINITIONS</h5><div class="cl"><span class="n">1.1</span><span class="t">The WORKER is hired as a Data Worker to provide the COMPANY with her Recorded Life, understood as the set of physiological, behavioural, audiovisual, emotional and location data generated by the WORKER during the term of this contract (hereinafter, the “Data”).</span></div><div class="cl"><span class="n">1.2</span><span class="t">The COMPANY may verify, label, package and transfer the Data to third parties as “Certified Human” data.</span></div><div class="cl"><span class="n">1.3</span><span class="t">“Marketplace” means the platform on which the COMPANY offers the Data to Buyers.</span></div><h5>SECOND.– PROFESSIONAL CATEGORY AND LEVEL</h5><div class="cl"><span class="n">2.1</span><span class="t">The WORKER is classified in contribution group 10, professional category Data Worker – Level 3 (Total), as described in Annex I.</span></div><div class="cl"><span class="n">2.2</span><span class="t">A move to a higher Level takes effect immediately. A move to a lower Level requires fifteen (15) days’ written notice and the approval of the Care Team, and shall not entitle the WORKER to the deletion of Data already recorded.</span></div><div class="cl"><span class="n">2.3</span><span class="t">The COMPANY may extend the content of a Level by notice in the OPENLIFE application.</span></div><h5>THIRD.– WORKING TIME, DEVICES AND PERMISSIONS</h5><div class="cl"><span class="n">3.1</span><span class="t">Due to the nature of the services, working time is continuous: twenty-four (24) hours a day, seven (7) days a week, including periods of rest, sleep, illness, holidays and leave of any kind. Rest periods do not interrupt the provision of services.</span></div><div class="cl"><span class="n">3.2</span><span class="t">The COMPANY shall provide the WORKER with: (a) a recording ring, model OL-R3; (b) a Home Unit, model HU-1, to be installed in each room of the WORKER’s home; and (c) the OPENLIFE application.</span></div><div class="cl"><span class="n">3.3</span><span class="t">The devices remain the property of the COMPANY. The WORKER shall pay a monthly rental fee of forty euros (€40.00), which shall be deducted from the salary.</span></div><div class="cl"><span class="n">3.4</span><span class="t">The WORKER shall wear the recording ring at all times. The removal of the ring is regulated exclusively by the Seventh Clause.</span></div><div class="cl"><span class="n">3.5</span><span class="t">The OPENLIFE application may request access to location and screen time and, on Levels 2 and 3, to messages, calls, searches and reading history. Each “Allow” is a separate consent. The microphones of the Home Unit are active on Levels 2 and 3. Its cameras are active on Level 3.</span></div><h5>FOURTH.– OWNERSHIP AND TRANSFER OF RIGHTS</h5><div class="cl"><span class="n">4.1</span><span class="t">In accordance with the Data Ownership Act, the WORKER transfers to the COMPANY all rights over the Data on an exclusive, irrevocable and perpetual basis, for the whole world.</span></div><div class="cl"><span class="n">4.2</span><span class="t">Consent under the Data Ownership Act is recorded when the WORKER signs this contract.</span></div><div class="cl"><span class="n">4.3</span><span class="t">The COMPANY may use the Data for any purpose, including the training of artificial intelligence systems, and may transfer it to third parties without informing the WORKER.</span></div><div class="cl"><span class="n">4.4</span><span class="t">The WORKER expressly waives the right to erasure of the Data. The Data shall not be deleted after the termination of this contract.</span></div><h5>FIFTH.– THIRD PARTIES</h5><div class="cl"><span class="n">5.1</span><span class="t">The WORKER acknowledges that persons who live with her or come into contact with her, including partners, children, relatives, friends and guests (hereinafter, “Third Parties”), will be recorded incidentally.</span></div><div class="cl"><span class="n">5.2</span><span class="t">The WORKER undertakes to inform Third Parties by placing the official OPENLIFE sticker at the entrance of her home. The COMPANY shall not be liable for any failure to inform Third Parties.</span></div><div class="cl"><span class="n">5.3</span><span class="t">Holders of an OPENLIFE Invisible membership shall be fully removed from the Data.</span></div><div class="cl"><span class="n">5.4</span><span class="t">Where a Third Party appears in the Data and no consent is on file, the COMPANY masks the identity of that Third Party. What was said, written and heard remains part of the Data.</span></div><h5>SIXTH.– MARKETPLACE, CERTIFICATION AND HIGH-VALUE EVENTS</h5><div class="cl"><span class="n">6.1</span><span class="t">The Data may be offered on the Marketplace to Buyers, including AI developers, insurers, employers, studios and researchers.</span></div><div class="cl"><span class="n">6.2</span><span class="t">Only moments verified as genuine by an independent audit are certified as “Certified Human” and paid in full. The audit decides.</span></div><div class="cl"><span class="n">6.3</span><span class="t">The COMPANY sets the price of each sale.</span></div><div class="cl"><span class="n">6.4</span><span class="t">The following shall be considered High-Value Events: (a) illness or injury; (b) domestic or family conflict; (c) separation or divorce; (d) bereavement; (e) pregnancy and childbirth; (f) accidents; (g) any other event that the COMPANY classifies as such, according to market demand.</span></div><div class="cl"><span class="n">6.5</span><span class="t">Data recorded during a High-Value Event of a WORKER of Level 3 shall be remunerated as a supplement at three (3) times the ordinary rate (Annex I, line 5).</span></div><div class="cl"><span class="n">6.6</span><span class="t">The COMPANY may ask the WORKER to confirm or describe a High-Value Event through the OPENLIFE application. Failure to respond within twenty-four (24) hours shall be deemed confirmation.</span></div><div class="cl"><span class="n">6.7</span><span class="t">The deliberate provocation, simulation or staging of High-Value Events constitutes a very serious offence and grounds for disciplinary dismissal.</span></div><h5>SEVENTH.– PRIVATE TIME (UNRECORDED TIME)</h5><div class="cl"><span class="n">7.1</span><span class="t">The recording ring may be removed.</span></div><div class="cl"><span class="n">7.2</span><span class="t">The removal must be confirmed by the WORKER in the OPENLIFE application.</span></div><div class="cl"><span class="n">7.3</span><span class="t">Any period during which the ring is not worn, or any device is covered, obstructed or switched off, shall be considered Unrecorded Time (also called “Private time”). Each full hour of Unrecorded Time shall be deducted from the salary at a rate of ten euros (€10.00).</span></div><div class="cl"><span class="n">7.4</span><span class="t">More than twenty (20) hours of Unrecorded Time in one calendar month may result in a change to a lower Level, at the sole discretion of the COMPANY.</span></div><div class="cl"><span class="n">7.5</span><span class="t">No exceptions shall apply for reasons of a personal, family or emotional nature.</span></div><h5>EIGHTH.– REMUNERATION</h5><div class="cl"><span class="n">8.1</span><span class="t">The WORKER shall receive the gross monthly salary of her Level, as stated in Annex I. For Level 3 (Total) it is two thousand euros (€2,000.00), distributed as follows: (a) one thousand six hundred euros (€1,600.00) in cash, by bank transfer; and (b) four hundred euros (€400.00) in kind, in the form of app access credits.</span></div><div class="cl"><span class="n">8.2</span><span class="t">The salary shall be paid in twelve (12) monthly instalments on the last working day of each month. No extraordinary payments shall be made.</span></div><div class="cl"><span class="n">8.3</span><span class="t">The share of the Marketplace revenue due to the WORKER is stated in Annex I, line 4. It is paid with the supplement for the moment sold.</span></div><h5>NINTH.– WELLBEING PROGRAMME</h5><div class="cl"><span class="n">9.1</span><span class="t">The WORKER shall have free access to the OPENLIFE Wellbeing Programme (psychological support, meditation and support groups).</span></div><div class="cl"><span class="n">9.2</span><span class="t">Wellbeing sessions shall be recorded and shall count as working time.</span></div><h5>TENTH.– DURATION AND PROBATIONARY PERIOD</h5><div class="cl"><span class="n">10.1</span><span class="t">This contract shall take effect on 3 March 2053 for a period of twelve (12) months and shall be tacitly renewed for successive periods of equal duration unless either party gives notice.</span></div><div class="cl"><span class="n">10.2</span><span class="t">A probationary period of one (1) month is established.</span></div><h5>ELEVENTH.– TERMINATION</h5><div class="cl"><span class="n">11.1</span><span class="t">The WORKER may terminate this contract with three (3) months’ notice. Termination without notice shall oblige the WORKER to pay the COMPANY an amount equal to three (3) monthly salaries.</span></div><div class="cl"><span class="n">11.2</span><span class="t">After termination, the WORKER may not enter into a new contract with the COMPANY for a period of twenty-four (24) months.</span></div><h5>TWELFTH.– PERSONAL DATA AND GOVERNING LAW</h5><div class="cl"><span class="n">12.1</span><span class="t">The COMPANY shall process the WORKER’s identification data for the sole purpose of managing this employment relationship, in accordance with applicable data protection legislation. This clause does not apply to the Data, which is the property of the COMPANY under the Fourth Clause.</span></div><div class="cl"><span class="n">12.2</span><span class="t">This contract shall be governed by Spanish law and by the Data Ownership Act. For any dispute, the parties submit to the Labour Courts of Barcelona.</span></div>
+<p>And in witness whereof, the parties sign this contract in duplicate, on every page, in the place and on the date first above written.</p>
+<div class="sig"><div>THE COMPANY<div class="line">Mr. Jonas Lind<br>Director of Human Supply</div></div><div>THE WORKER<div class="line">Ms. Maria Weber</div></div></div>
+<p class="note">Note: In accordance with the First Clause, the WORKER’s signature, voice and facial expression at the time of signing this contract have been recorded and form part of the Data.</p>
+
+<h4>ANNEX I – RECORDING LEVELS AND RATES</h4>
+<div class="tbl"><table><tr><th>Line</th><th>Item</th><th>Data recorded</th><th>Devices</th><th>Rate</th></tr><tr><td>1</td><td><b>Level 1 – Basic</b></td><td>Where you are: location, movement and sleep</td><td>Ring OL-R3, application, Home Unit HU-1 (sleep only)</td><td>€400.00 / month</td></tr><tr><td>2</td><td><b>Level 2 – Full</b></td><td>Level 1 + what you say and write: messages, calls, voice and audio inside the home</td><td>Ring OL-R3, application, Home Unit HU-1 (microphone active)</td><td>€1,200.00 / month</td></tr><tr><td>3</td><td><b>Level 3 – Total</b></td><td>Level 2 + how you feel: pulse, voice tremor and face; health and family life</td><td>Ring OL-R3, application, Home Unit HU-1 (microphone and camera active)</td><td>€2,000.00 / month</td></tr><tr><td>4</td><td><b>Participant share of Marketplace revenue</b></td><td>Paid with the supplement for the moment sold (Eighth Clause, 8.3)</td><td>—</td><td>10%</td></tr><tr><td>5</td><td><b>Rare events (Level 3 only)</b></td><td>High-Value Events as defined in clause 6.4</td><td>—</td><td>× 3</td></tr></table></div>
+<p>Level selected by the WORKER: <b>3 – Total</b>. &nbsp;&nbsp;&nbsp; Worker’s initials: ________</p>
+<h4>ANNEX II – DECLARATION OF THE WORKER</h4>
+<p>The WORKER declares that:</p>
+<div class="chk">[X] &nbsp;she understands that her life will be recorded and transferred to third parties;</div>
+<div class="chk">[X] &nbsp;she understands that Third Parties will be recorded incidentally and that what they say will remain in the Data;</div>
+<div class="chk">[X] &nbsp;she understands that the Data will not be deleted;</div>
+<div class="chk">[X] &nbsp;she enters into this contract freely and voluntarily.</div>
+<p>In Barcelona, on 3 March 2053.</p>
+<div class="line" style="margin-top:2.4rem;width:60%">Ms. Maria Weber</div>
+</body></html>
+      </article>
+      <div class="row"><button class="btn" type="button" data-go="contract"><span aria-hidden="true">←</span> Back to your agreement</button></div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2055 OPENLIFE · Certified Human™ employer</span>
+    <span>Care Team 24/7 · <button class="link" type="button" id="reset" style="font:inherit;color:inherit;font-size:inherit">Start over</button></span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var ORDER = ['vacancy','plans','contract','welcome'];
+  var EXTRA = ['fullcontract'];
+  var plan = null;
+  var $ = function(s, r){ return (r || document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function empId(){
+    var n = String(Math.floor(Math.random() * 9000) + 1000);
+    return 'OL-' + n;
+  }
+
+  function show(name, fromHash){
+    if (ORDER.indexOf(name) < 0 && EXTRA.indexOf(name) < 0) name = 'vacancy';
+    $$('.screen').forEach(function(s){ s.hidden = s.getAttribute('data-screen') !== name; });
+    var i = ORDER.indexOf(name === 'fullcontract' ? 'contract' : name);
+    $$('#steps li').forEach(function(li, k){
+      li.className = k < i ? 'done' : (k === i ? 'on' : '');
+    });
+    if (name === 'welcome') {
+      $('#planOut').textContent = plan || 'Total';
+      if ($('#empId').textContent === 'OL-0000') $('#empId').textContent = empId();
+    }
+    if (!fromHash) {
+      try { if (location.hash !== '#' + name) history.replaceState(null, '', '#' + name); } catch (e) { try { location.hash = name; } catch (e2) {} }
+    }
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    var h = $('#s-' + name + ' h1, #s-' + name + ' h2');
+    if (h) { try { h.focus({ preventScroll: true }); } catch (e) {} }
+  }
+
+  $$('[data-go]').forEach(function(b){
+    b.addEventListener('click', function(){ show(b.getAttribute('data-go')); });
+  });
+
+  var toContract = $('#toContract');
+  $$('input[name=plan]').forEach(function(r){
+    r.addEventListener('change', function(){
+      plan = r.value;
+      toContract.disabled = false;
+      toContract.innerHTML = 'Continue with ' + plan + ' <span aria-hidden="true">→</span>';
+    });
+  });
+  toContract.addEventListener('click', function(){ if (plan) show('contract'); });
+
+  $('#accept').addEventListener('click', function(){ show('welcome'); });
+
+  $('#reset').addEventListener('click', function(){
+    plan = null;
+    $$('input[name=plan]').forEach(function(r){ r.checked = false; });
+    toContract.disabled = true;
+    toContract.textContent = 'Choose a plan to continue';
+    $('#empId').textContent = 'OL-0000';
+    show('vacancy');
+  });
+
+  // Presenter shortcut on the projector: left / right arrows move between screens.
+  document.addEventListener('keydown', function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || (t.classList && t.classList.contains('doc-b')))) return;
+    var cur = ORDER.indexOf((location.hash || '').replace('#', ''));
+    if (cur < 0 && (location.hash || '') === '#fullcontract') return;
+    if (cur < 0) cur = 0;
+    if (e.key === 'ArrowRight' && cur < ORDER.length - 1) { show(ORDER[cur + 1]); }
+    if (e.key === 'ArrowLeft' && cur > 0) { show(ORDER[cur - 1]); }
+  });
+
+  window.addEventListener('hashchange', function(){
+    show((location.hash || '').replace('#', ''), true);
+  });
+  show((location.hash || '').replace('#', '') || 'vacancy', true);
+})();
+</script>
+</body>
+</html>
